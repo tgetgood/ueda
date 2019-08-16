@@ -182,6 +182,14 @@
                         :y {:field :log-spread
                             :type  :quantitative}}}]})
 
-(def p (- 1 0.91414) #_(- 1 (:a (slope data))))
 
-(oz/view! (mb (xform #(Math/pow % p) data)))
+(defn T [p]
+  (if (zero? p)
+    (fn [x]
+      (Math/log x))
+    (fn [x]
+      (/ (- (Math/pow x p) 1) p))))
+
+(def p #_(- 1 0.91414) (- 1 (:a (slope data))))
+
+(oz/view! (mb (xform (T p) data)))
